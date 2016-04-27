@@ -1,8 +1,8 @@
 angular.module('mc.core.ui.bs.dataModelWIzard', ['mc.util.messages', 'mc.util.ui.focusMe']).config ['messagesProvider', (messagesProvider)->
-  factory = [ '$modal', '$q', 'messages', '$rootScope', ($modal, $q, messages,$rootScope) ->
+  factory = [ '$uibModal', '$q', 'messages', '$rootScope', ($uibModal, $q, messages,$rootScope) ->
     (title, body, args) ->
 
-      $rootScope.createDataModelWizard ?= $modal.open {
+      $rootScope.createDataModelWizard ?= $uibModal.open {
         windowClass: 'create-classification-wizard'
         backdrop: 'static'
         keyboard: false
@@ -11,7 +11,7 @@ angular.module('mc.core.ui.bs.dataModelWIzard', ['mc.util.messages', 'mc.util.ui
 
         #language=HTML
         templateUrl: '/mc/core/ui/dataModelWizard.html'
-        controller: ['$scope', '$state', '$window', 'messages', 'names', 'catalogueElementResource', '$q', '$modalInstance', 'catalogue', '$rootScope', 'delayedQueueExecutor', ($scope, $state, $window, messages, names, catalogueElementResource, $q, $modalInstance, catalogue, $rootScope, delayedQueueExecutor) ->
+        controller: ['$scope', '$state', '$window', 'messages', 'names', 'catalogueElementResource', '$q', '$uibModalInstance', 'catalogue', '$rootScope', 'delayedQueueExecutor', ($scope, $state, $window, messages, names, catalogueElementResource, $q, $uibModalInstance, catalogue, $rootScope, delayedQueueExecutor) ->
           execAfter50 = delayedQueueExecutor(500)
 
           $scope.reset = ->
@@ -135,12 +135,12 @@ angular.module('mc.core.ui.bs.dataModelWIzard', ['mc.util.messages', 'mc.util.ui
           $scope.select('classification')
 
           $scope.dismiss = (reason) ->
-            return $modalInstance.dismiss(reason) if $scope.finished
+            return $uibModalInstance.dismiss(reason) if $scope.finished
             if $scope.classification.name or $scope.imports.length > 0
               messages.confirm("Close Data Model Wizard", "Do you want to discard all changes?").then ->
-                $modalInstance.dismiss(reason)
+                $uibModalInstance.dismiss(reason)
             else
-              $modalInstance.dismiss(reason)
+              $uibModalInstance.dismiss(reason)
         ]
 
       }

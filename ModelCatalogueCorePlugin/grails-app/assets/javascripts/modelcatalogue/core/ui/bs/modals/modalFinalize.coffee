@@ -1,12 +1,12 @@
 angular.module('mc.core.ui.bs.modalFinalize', ['mc.util.messages']).config ['messagesProvider', (messagesProvider)->
 
-  factory = [ '$modal', '$q', 'messages', ($modal, $q, messages) ->
+  factory = [ '$uibModal', '$q', 'messages', ($uibModal, $q, messages) ->
     (title, body, args) ->
       if not args?.element?
         messages.error('Cannot create edit dialog.', 'The element to be edited is missing.')
         return $q.reject('Missing element argument!')
 
-      dialog = $modal.open {
+      dialog = $uibModal.open {
         template: '''
          <div class="modal-header">
             <h4>''' + (title ? 'Finalize Data Model') + '''</h4>
@@ -31,12 +31,12 @@ angular.module('mc.core.ui.bs.modalFinalize', ['mc.util.messages']).config ['mes
           <contextual-actions role="modal"></contextual-actions>
         </div>
         '''
-        controller: ['$rootScope', '$scope', 'messages', '$modalInstance', 'enhance', 'rest', 'modelCatalogueApiRoot', ($rootScope, $scope, messages, $modalInstance, enhance, rest, modelCatalogueApiRoot) ->
+        controller: ['$rootScope', '$scope', 'messages', '$uibModalInstance', 'enhance', 'rest', 'modelCatalogueApiRoot', ($rootScope, $scope, messages, $uibModalInstance, enhance, rest, modelCatalogueApiRoot) ->
           $scope.semanticVersion = args.element.semanticVersion
           $scope.revisionNotes = args.element.revisionNotes
           $scope.messages = messages.createNewMessages()
 
-          $scope.$dismiss = $modalInstance.dismiss
+          $scope.$dismiss = $uibModalInstance.dismiss
           $scope.working = false
 
           $scope.finalizeElement = ->
@@ -46,7 +46,7 @@ angular.module('mc.core.ui.bs.modalFinalize', ['mc.util.messages']).config ['mes
               $rootScope.$broadcast 'catalogueElementUpdated', finalized
               $rootScope.$broadcast 'catalogueElementFinalized', finalized
               $rootScope.$broadcast 'redrawContextualActions'
-              $modalInstance.close(finalized)
+              $uibModalInstance.close(finalized)
               $scope.working = false
             , (response) ->
               $scope.messages.showErrorsFromResponse(response)

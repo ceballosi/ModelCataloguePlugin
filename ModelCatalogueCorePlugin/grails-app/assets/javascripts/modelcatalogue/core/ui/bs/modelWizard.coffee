@@ -1,10 +1,10 @@
 angular.module('mc.core.ui.bs.modelWizard', ['mc.util.messages', 'mc.util.ui.focusMe', 'mc.core.ui.bs.watchAndAskForImportOrCloneCtrl']).config ['messagesProvider', (messagesProvider)->
-  factory = [ '$modal', '$q', 'messages', '$rootScope', ($modal, $q, messages,$rootScope) ->
+  factory = [ '$uibModal', '$q', 'messages', '$rootScope', ($uibModal, $q, messages,$rootScope) ->
     (title, body, args) ->
 
       # TODO: add add dataModels step
 
-      $rootScope.createModelWizard ?= $modal.open {
+      $rootScope.createModelWizard ?= $uibModal.open {
         windowClass: 'create-model-wizard'
         backdrop: 'static'
         keyboard: false
@@ -13,7 +13,7 @@ angular.module('mc.core.ui.bs.modelWizard', ['mc.util.messages', 'mc.util.ui.foc
           args: -> args
 
         templateUrl: '/mc/core/ui/modals/dataClassWizard.html'
-        controller: ['$scope', '$state', '$window', 'messages', 'names', 'catalogueElementResource', '$modalInstance', '$timeout', 'args', 'delayedQueueExecutor', '$q', '$log', 'enhance', 'metadataEditors', 'catalogue', '$controller', ($scope, $state, $window, messages, names, catalogueElementResource, $modalInstance, $timeout, args, delayedQueueExecutor, $q, $log, enhance, metadataEditors, catalogue, $controller) ->
+        controller: ['$scope', '$state', '$window', 'messages', 'names', 'catalogueElementResource', '$uibModalInstance', '$timeout', 'args', 'delayedQueueExecutor', '$q', '$log', 'enhance', 'metadataEditors', 'catalogue', '$controller', ($scope, $state, $window, messages, names, catalogueElementResource, $uibModalInstance, $timeout, args, delayedQueueExecutor, $q, $log, enhance, metadataEditors, catalogue, $controller) ->
 
           angular.extend(this, $controller('watchAndAskForImportOrCloneCtrl', {$scope: $scope}))
 
@@ -249,12 +249,12 @@ angular.module('mc.core.ui.bs.modelWizard', ['mc.util.messages', 'mc.util.ui.foc
                 $scope.children.push value
 
           $scope.dismiss = (reason) ->
-            return $modalInstance.dismiss(reason) if $scope.finished
+            return $uibModalInstance.dismiss(reason) if $scope.finished
             if $scope.dataClass.name or $scope.dataClass.description or not $scope.isEmpty($scope.metadata) or $scope.parents.length > 0 or $scope.children.length > 0 or $scope.dataElements.length > 0 or $scope.dataModels.length > 0
               messages.confirm("Close Data Class Wizard", "Do you want to discard all changes?").then ->
-                $modalInstance.dismiss(reason)
+                $uibModalInstance.dismiss(reason)
             else
-              $modalInstance.dismiss(reason)
+              $uibModalInstance.dismiss(reason)
 
           $scope.prefillFrom = ->
             dataClassPromise = messages.prompt('Clone Data Class', 'Please, select from which Data Class should be the properties cloned', type: 'catalogue-element', resource: 'dataClass')
